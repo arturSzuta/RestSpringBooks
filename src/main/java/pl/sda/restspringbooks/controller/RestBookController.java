@@ -2,6 +2,7 @@ package pl.sda.restspringbooks.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import pl.sda.restspringbooks.model.Book;
@@ -37,7 +38,8 @@ public class RestBookController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Void> createBook(@RequestBody Book book) {
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<Book> createBook(@RequestBody Book book) {
         final OptionalLong max = books.stream().mapToLong(b -> b.getId()).max();
         book.setId(max.getAsLong() + 1);
         books.add(book);
